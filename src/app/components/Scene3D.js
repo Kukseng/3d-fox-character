@@ -75,7 +75,7 @@ export default function Scene3D() {
       position: [-2, 0, 0],
       rotation: [0, 0.5, 0],
       scale: [1, 1, 1],
-      visible: true
+      visible: true  // Only first one visible by default
     },
     {
       name: "Character 2", 
@@ -83,7 +83,7 @@ export default function Scene3D() {
       position: [0, 0, 0],
       rotation: [0, 0, 0],
       scale: [1, 1, 1],
-      visible: true
+      visible: false  // Hidden by default
     },
     {
       name: "Character 3",
@@ -91,7 +91,7 @@ export default function Scene3D() {
       position: [2, 0, 0],
       rotation: [0, -0.5, 0],
       scale: [1, 1, 1],
-      visible: true
+      visible: false  // Hidden by default
     }
   ])
 
@@ -103,7 +103,10 @@ export default function Scene3D() {
 
   return (
     <div className="w-full h-screen relative">
-      
+      <div className="absolute top-4 left-4 z-10 bg-black bg-opacity-50 text-white p-4 rounded">
+        <h1 className="text-xl font-bold mb-2">Multiple 3D Characters</h1>
+        <p className="text-sm">Use mouse to rotate • Scroll to zoom</p>
+      </div>
 
       <CharacterSelector 
         characters={characters}
