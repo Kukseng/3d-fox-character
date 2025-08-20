@@ -36,47 +36,33 @@ export default function VanillaScene() {
         mountRef.current.appendChild(renderer.domElement)
       }
 
-      // Lighting - much dimmer to preserve original model appearance
-      const ambientLight = new THREE.AmbientLight(0x404040, 0.2)
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.6)
       scene.add(ambientLight)
 
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4)
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
       directionalLight.position.set(5, 10, 7)
       directionalLight.castShadow = true
       scene.add(directionalLight)
-
-      // Additional soft lighting
-      const pointLight = new THREE.PointLight(0xffffff, 0.1, 100)
-      pointLight.position.set(-5, 5, 5)
-      scene.add(pointLight)
 
       // Controls
       controls = new OrbitControls(camera, renderer.domElement)
       controls.enableDamping = true
       controls.dampingFactor = 0.05
 
-      // Load model with proper material preservation
+      // Load model
       loader = new GLTFLoader()
       loader.load(
         '/models/Holofil-Taurus.glb',
         (gltf) => {
           const model = gltf.scene
           model.scale.set(1, 1, 1)
-          
-          // Preserve original materials - don't modify them
           model.traverse((child) => {
             if (child.isMesh) {
               child.castShadow = true
               child.receiveShadow = true
-              
-              // Preserve original material properties
-              if (child.material) {
-                child.material.needsUpdate = true
-                // Don't modify material properties - keep originals
-              }
             }
           })
-          
           scene.add(model)
           console.log('Model loaded successfully')
         },
