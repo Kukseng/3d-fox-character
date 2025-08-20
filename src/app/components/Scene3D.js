@@ -35,7 +35,7 @@ export default function Scene3D() {
         />
         
         <Suspense fallback={null}>
-          <Model url="/models/fox_character_design.glb" />
+          <Model url="/models/fox-pink.glb" />
           <Environment preset="studio" />
         </Suspense>
         
