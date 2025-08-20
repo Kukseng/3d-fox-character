@@ -103,10 +103,7 @@ export default function Scene3D() {
 
   return (
     <div className="w-full h-screen relative">
-      <div className="absolute top-4 left-4 z-10 bg-black bg-opacity-50 text-white p-4 rounded">
-        <h1 className="text-xl font-bold mb-2">Multiple 3D Characters</h1>
-        <p className="text-sm">Use mouse to rotate • Scroll to zoom</p>
-      </div>
+      
 
       <CharacterSelector 
         characters={characters}
