@@ -1,0 +1,93 @@
+'use client'
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+
+export default function JoinSession() {
+  const [nickname, setNickname] = useState('');
+  const [backgroundColor, setBackgroundColor] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const [error, setError] = useState('');
+
+  // Generate avatar preview when nickname or background color changes
+  useEffect(() => {
+    if (nickname) {
+      // Validate nickname (basic regex to prevent invalid characters)
+      if (!/^[a-zA-Z0-9_]{3,20}$/.test(nickname)) {
+        setError('Nickname must be 3-20 characters (letters, numbers, underscores only)');
+        setAvatarUrl('');
+        return;
+      }
+
+      // Construct DiceBear URL with valid backgroundColor (hex codes)
+      let url = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(nickname)}`;
+      if (backgroundColor) {
+        url += `&backgroundColor=${backgroundColor}`;
+      }
+      setAvatarUrl(url);
+      setError('');
+    } else {
+      setAvatarUrl('');
+      setError('');
+    }
+  }, [nickname, backgroundColor]);
+
+  const handleJoin = () => {
+    if (!nickname) {
+      setError('Please enter a nickname');
+      return;
+    }
+    // Simulate joining (replace with backend API call in full implementation)
+    alert(`Joined with nickname: ${nickname} and avatar: ${avatarUrl}`);
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <h1 className="text-3xl font-bold mb-6 text-blue-600">Join Quiz - StackQuizz</h1>
+      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+        <label className="block text-lg font-medium mb-2">Enter Nickname</label>
+        <input
+          type="text"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+          placeholder="Your nickname"
+          className="border p-3 w-full rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <label className="block text-lg font-medium mb-2">Avatar Background Color</label>
+        <select
+          value={backgroundColor}
+          onChange={(e) => setBackgroundColor(e.target.value)}
+          className="border p-3 w-full rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Default</option>
+          <option value="0000ff">Blue</option>
+          <option value="ff0000">Red</option>
+          <option value="00ff00">Green</option>
+          <option value="800080">Purple</option>
+        </select>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {avatarUrl && (
+          <div className="flex flex-col items-center mb-4">
+            <Image
+              src={avatarUrl}
+              alt="Avatar Preview"
+              width={120}
+              height={120}
+              className="rounded-full border-2 border-gray-300"
+              unoptimized // Required for SVG support
+            />
+            <p className="mt-2 text-gray-600">Preview for {nickname}</p>
+          </div>
+        )}
+        <button
+          disabled={!nickname || !!error}
+          className={`w-full p-3 rounded text-white ${
+            nickname && !error ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 cursor-not-allowed'
+          }`}
+          onClick={handleJoin}
+        >
+          Join Quiz
+        </button>
+      </div>
+    </div>
+  );
+}
