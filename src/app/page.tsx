@@ -18,7 +18,12 @@ import { OrbitControls, useGLTF, Environment, ContactShadows } from '@react-thre
 import { ChevronLeft, ChevronRight, RotateCw, ZoomIn, ZoomOut, Home } from 'lucide-react';
 
 // Model component
-function Model({ url, scale = 1 }) {
+interface ModelProps {
+  url: string;
+  scale?: number;
+}
+
+function Model({ url, scale = 1 }: ModelProps) {
   const { scene } = useGLTF(url);
   return <primitive object={scene} scale={[scale, scale, scale]} />;
 }
@@ -35,7 +40,15 @@ function Loader() {
   );
 }
 
-const characters = [
+// Character data - update these paths to match your .glb files
+interface Character {
+  id: number;
+  name: string;
+  file: string;
+  description: string;
+}
+
+const characters:Character[]  = [
   { id: 1, name: "Cactus Character", file: "/models/blue-3d-2.glb", description: "Cute cactus with pink flowers" },
   { id: 2, name: "Character 2", file: "/models/blue-3d.glb", description: "Second character design" },
   { id: 3, name: "Character 3", file: "/models/green-plant-3d.glb", description: "Third character design" },
@@ -117,6 +130,7 @@ export default function CharacterViewer3D() {
           <pointLight position={[-5, 5, 5]} intensity={0.6} color="#ff6b9d" />
           <pointLight position={[5, 5, -5]} intensity={0.6} color="#4ecdc4" />
           
+   
           <Suspense fallback={null}>
             <Model 
               url={characters[currentCharacter].file} 
@@ -130,7 +144,8 @@ export default function CharacterViewer3D() {
               resolution={256} 
               color="#000000" 
             />
-            <Environment preset="studio" intensity={1.2} />
+           
+            <Environment preset="studio"  />
           </Suspense>
           
           <OrbitControls
